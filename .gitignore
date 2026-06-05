@@ -23,6 +23,9 @@ data/chroma/
 # Temp datasets
 data/*_temp/
 
+# Claude Code
+.claude/
+
 # OS
 .DS_Store
 Thumbs.db
