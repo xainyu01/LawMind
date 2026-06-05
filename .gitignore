@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Virtual environment
+.venv/
+
+# Environment variables
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# Models (large, re-downloadable)
+models/
+
+# ChromaDB persistence
+data/chroma/
+
+# Temp datasets
+data/*_temp/
+
+# OS
+.DS_Store
+Thumbs.db

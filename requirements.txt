@@ -1,0 +1,31 @@
+# 1. Web 框架
+fastapi
+uvicorn[standard]
+python-multipart
+
+# 2. 基础工具
+python-dotenv
+openai
+
+# 3. 检索相关
+bm25s
+redis
+
+# 4. 嵌入模型
+sentence-transformers
+
+# 5. 向量数据库
+chromadb
+
+# 6. 文档解析
+unstructured[pdf,docx]
+python-docx
+pypdf2
+
+
+# 7. LangChain 生态 & DeepSeek 集成
+# 统一使用 LangChain 1.0+ 生态，并使用 langchain-openai 兼容调用 DeepSeek
+langchain
+langchain-community
+langchain-text-splitters
+langchain-openai
