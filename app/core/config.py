@@ -36,8 +36,21 @@ class Settings:
     LLM_TEMPERATURE: float = 0.1
     LLM_MAX_TOKENS: int = 2048
 
-    # Redis (Phase 4)
+    # Redis / Cache Backend
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    CACHE_BACKEND_TYPE: str = os.getenv("CACHE_BACKEND", "auto")  # auto / redis / disk
+    DISK_CACHE_DIR: str = "./data/cache"
+
+    # Conversation Memory
+    MAX_MEMORY_TURNS: int = 10       # 每会话最多保留轮数
+    SESSION_TTL: int = 3600          # 会话过期时间（秒）
+
+    # Semantic Cache
+    SEMANTIC_CACHE_THRESHOLD: float = 0.92  # 缓存命中相似度阈值
+    STATUTE_CACHE_TTL: int = 604800        # 法条缓存 7 天（秒）
+    CASE_CACHE_TTL: int = 2592000          # 案例缓存 30 天
+    LEGAL_QA_CACHE_TTL: int = 604800       # 知识问答缓存 7 天
+    CONTRACT_CACHE_TTL: int = 86400        # 合同审查缓存 1 天
 
 
 settings = Settings()

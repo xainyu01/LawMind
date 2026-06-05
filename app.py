@@ -4,17 +4,29 @@
     HF_ENDPOINT=https://hf-mirror.com PYTHONPATH=. uv run streamlit run app.py
 """
 
+import uuid
+
 import streamlit as st
 
 from app.core.config import settings
 from app.rag.retriever import get_retriever
 from app.rag.reranker import get_reranker
 from app.rag.generator import get_generator
+from app.db.memory import ConversationMemory
+from app.db.cache import SemanticCache
 
 st.set_page_config(page_title="法律 RAG 助手", page_icon="⚖️", layout="wide")
 
 st.title("⚖️ 法律 RAG 助手")
 st.caption("基于检索增强生成的法律智能问答系统")
+
+# ---- Session state ----
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())[:8]
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "cache_hits" not in st.session_state:
+    st.session_state.cache_hits = 0
 
 # ---- Sidebar ----
 with st.sidebar:
@@ -29,10 +41,15 @@ with st.sidebar:
     st.divider()
     st.caption(f"检索策略：BM25 + 向量 + Cross-Encoder 重排序")
     st.caption(f"LLM：DeepSeek API")
+    st.divider()
+    st.caption(f"会话 ID: `{st.session_state.session_id}`")
+    st.caption(f"缓存命中: {st.session_state.cache_hits} 次")
 
-# ---- Session state ----
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+    if st.button("新会话"):
+        st.session_state.session_id = str(uuid.uuid4())[:8]
+        st.session_state.messages = []
+        st.session_state.cache_hits = 0
+        st.rerun()
 
 # ---- Lazy load models ----
 @st.cache_resource
@@ -44,6 +61,8 @@ def load_models():
     return retriever, reranker, generator
 
 retriever, reranker, generator = load_models()
+memory = ConversationMemory()
+cache = SemanticCache()
 
 # ---- Chat history ----
 for msg in st.session_state.messages:
@@ -77,8 +96,14 @@ if query := st.chat_input("请输入您的法律问题..."):
             sources = []
             intent = "legal_qa"
         else:
+            # 获取记忆上下文
+            context_text = memory.get_context_for_prompt(st.session_state.session_id)
+            enriched_query = query
+            if context_text:
+                enriched_query = f"[上下文]\n{context_text}\n\n[当前问题]\n{query}"
+
             # 流式生成，逐 token 输出
-            stream = generator.generate_stream(query, relevant[:5])
+            stream = generator.generate_stream(enriched_query, relevant[:5])
 
             placeholder = st.empty()
             full_answer = ""
@@ -95,6 +120,15 @@ if query := st.chat_input("请输入您的法律问题..."):
 
             placeholder.markdown(full_answer)
             answer = full_answer
+
+            # 保存对话记忆
+            memory.save_turn(
+                session_id=st.session_state.session_id,
+                user_msg=query,
+                assistant_msg=answer,
+                intent=intent,
+                sources=relevant[:5],
+            )
 
         intent_labels = {
             "statute_lookup": "法条查询",
