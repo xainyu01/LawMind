@@ -212,10 +212,10 @@ cat data/feedback.jsonl
 - [x] `scripts/eval_ragas.py` RAGAS 风格评测脚本
 - [x] `data/eval/legal_eval_dataset.json` 评测数据集（10 题）
 - [x] `data/eval/eval_results.json` 评测结果输出
-- [ ] `app.py` 文件上传功能（侧边栏）
-- [ ] `app.py` 用户反馈按钮（👍 / 👎）
-- [ ] `data/feedback.jsonl` 反馈数据文件
-- [ ] 文档更新（进度.md、开发指南.md）
+- [x] `app.py` 文件上传功能（侧边栏）
+- [x] `app.py` 用户反馈按钮（👍 / 👎）
+- [x] `data/feedback.jsonl` 反馈数据文件
+- [x] 文档更新（进度.md、开发指南.md）
 
 ---
 
