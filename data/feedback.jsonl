@@ -1,0 +1,3 @@
+{"timestamp": "2026-06-06T13:06:02.116731", "session_id": "01ffcd11", "query": "你好", "answer": "", "rating": "positive", "intent": "chitchat"}
+{"timestamp": "2026-06-06T13:12:03.906905", "session_id": "94fc8f65", "query": "你好", "answer": "", "rating": "negative", "intent": "chitchat"}
+{"timestamp": "2026-07-10T23:47:01.334965", "session_id": "1be00f07", "query": "你好", "answer": "", "rating": "positive", "intent": "chitchat"}

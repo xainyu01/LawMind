@@ -49,13 +49,20 @@ def add_documents(docs) -> None:
     collection.add(ids=ids, embeddings=embeddings, documents=texts, metadatas=metadatas)
 
 
-def search(query: str, top_k: int = 5) -> List[dict]:
+def search(query: str, top_k: int = 5, where: Optional[dict] = None) -> List[dict]:
     collection = _get_collection()
     embedder = _get_embedding()
 
     query_embedding = embedder.embed_query(query)
 
-    results = collection.query(query_embeddings=[query_embedding], n_results=top_k)
+    query_params = {
+        "query_embeddings": [query_embedding],
+        "n_results": top_k,
+    }
+    if where:
+        query_params["where"] = where
+
+    results = collection.query(**query_params)
 
     hits = []
     if results["ids"] and results["ids"][0]:
@@ -79,6 +86,17 @@ def get_collection_count() -> int:
     """Return the number of documents in the collection."""
     collection = _get_collection()
     return collection.count()
+
+
+def get_embeddings_by_ids(ids: List[str]) -> dict:
+    """根据 ID 列表获取文档向量，返回 {id: embedding} 字典。"""
+    collection = _get_collection()
+    results = collection.get(ids=ids, include=["embeddings"])
+    emb_map = {}
+    if results["ids"] and len(results["embeddings"]) > 0:
+        for doc_id, emb in zip(results["ids"], results["embeddings"]):
+            emb_map[doc_id] = emb
+    return emb_map
 
 
 def clear_collection() -> None:

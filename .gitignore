@@ -32,3 +32,6 @@ Thumbs.db
 
 # Exclude law_ai-master
 文档/law_ai-master/
+
+# Exclude commit prompt
+NEXT_COMMIT_PROMPT.md

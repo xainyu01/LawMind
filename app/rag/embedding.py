@@ -1,8 +1,10 @@
-from typing import List
+from typing import List, Optional
 
 from sentence_transformers import SentenceTransformer
 
 from app.core.config import settings
+
+_embedder: Optional[BgeEmbedding] = None
 
 
 class BgeEmbedding:
@@ -28,3 +30,11 @@ class BgeEmbedding:
             normalize_embeddings=True,
         )
         return embedding.tolist()
+
+
+def get_embedding(text: str) -> List[float]:
+    """便捷函数：获取单条文本的 embedding。"""
+    global _embedder
+    if _embedder is None:
+        _embedder = BgeEmbedding()
+    return _embedder.embed_query(text)

@@ -1,12 +1,33 @@
-继续开发法律 RAG 系统。当前状态：Phase 1-4 已完成，Phase 5 进行中（RAGAS 评测已完成，文件上传和用户反馈待开发）。
+继续开发法律 RAG 系统。当前状态：Phase 1-7 已完成，Phase 8 待开始（检索优化）。
 
 请先阅读以下文件了解当前进度：
 1. 文档/开发指南.md — 快速上手
 2. 文档/进度.md — 完整进度检查清单
-3. 文档/phase5-前端与评估.md — 当前阶段 plan
+3. 文档/phase8-检索优化.md — 当前阶段 plan
 
-然后继续完成 Phase 5 剩余任务（按优先级）：
-- 文件上传功能（Streamlit 侧边栏上传 PDF/Word/TXT 并入库）
-- 用户反馈收集（👍/👎 按钮记录到 data/feedback.jsonl）
+然后继续完成 Phase 8 任务（按优先级）：
+- MMR 去重（app/rag/retriever.py）
+- 法条结构化分段（app/rag/document_loader.py）
+- 法律数据集下载与入库（scripts/download_dataset.py）
 
-完成后更新文档/进度.md 和文档/phase5-前端与评估.md 的检查清单状态，并创建 Phase 6 的 plan 文件。
+完成后更新文档/进度.md 和文档/phase8-检索优化.md 的检查清单状态。
+
+---
+
+剩余 Phase 规划（共 2-3 个 Phase）：
+
+Phase 8：检索优化（当前）
+- MMR 去重（提升检索多样性）
+- 按"款/项"分段（法条结构化分段）
+- 法律数据集下载与入库（SCL/LeCaRD）
+
+Phase 9：安全与异步
+- API 认证鉴权（API Key / JWT）
+- 请求限流
+- 消息队列异步处理（Redis Stream）
+
+Phase 10：存储扩展（可选）
+- 对象存储（MinIO/OSS）
+- 关系数据库日志（MySQL）
+
+建议：Phase 8 为核心必做，Phase 9 可选，Phase 10 可跳过。

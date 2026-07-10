@@ -32,6 +32,10 @@ class Settings:
     FINAL_TOP_K: int = 5
     MIN_RELEVANCE_SCORE: float = 0.1  # 低于此分数的法条不传给 LLM
 
+    # MMR 去重
+    MMR_ENABLED: bool = True          # 是否启用 MMR 去重
+    MMR_LAMBDA: float = 0.5           # 0=纯多样性, 1=纯相关性
+
     # LLM
     LLM_TEMPERATURE: float = 0.1
     LLM_MAX_TOKENS: int = 2048

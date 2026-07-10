@@ -1196,6 +1196,7 @@ dependencies = [
     { name = "langchain-deepseek" },
     { name = "langchain-text-splitters" },
     { name = "openai" },
+    { name = "prometheus-client" },
     { name = "pypdf2" },
     { name = "python-docx" },
     { name = "python-dotenv" },
@@ -1203,6 +1204,7 @@ dependencies = [
     { name = "redis" },
     { name = "sentence-transformers" },
     { name = "streamlit" },
+    { name = "structlog" },
     { name = "torch" },
     { name = "unstructured" },
     { name = "uvicorn", extra = ["standard"] },
@@ -1220,6 +1222,7 @@ requires-dist = [
     { name = "langchain-deepseek", specifier = ">=0.1.3" },
     { name = "langchain-text-splitters", specifier = ">=0.3.7" },
     { name = "openai", specifier = ">=1.51.0" },
+    { name = "prometheus-client", specifier = ">=0.25.0" },
     { name = "pypdf2", specifier = "==3.0.1" },
     { name = "python-docx", specifier = "==1.1.2" },
     { name = "python-dotenv", specifier = "==1.0.1" },
@@ -1227,6 +1230,7 @@ requires-dist = [
     { name = "redis", specifier = ">=5.1.1" },
     { name = "sentence-transformers", specifier = ">=3.1.1" },
     { name = "streamlit", specifier = ">=1.56.0" },
+    { name = "structlog", specifier = ">=25.5.0" },
     { name = "torch", specifier = ">=2.11.0", index = "https://download.pytorch.org/whl/cu128" },
     { name = "unstructured", specifier = ">=0.16.0" },
     { name = "uvicorn", extras = ["standard"], specifier = "==0.30.6" },
@@ -1970,6 +1974,15 @@ wheels = [
     { url = "https://mirrors.aliyun.com/pypi/packages/37/aa/51e5b4109a4cdfae28c3613eeeb10764a3794ebef8de93ffbb109465bea3/preshed-3.0.13-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:670db59a52e1823b5f088c764df474e65b686592d4093adbeef14581c95ee2cb" },
     { url = "https://mirrors.aliyun.com/pypi/packages/0e/6a/1d966f367a14c703dde629d150d996c1b727d442f620300b21c9ec1a24d1/preshed-3.0.13-cp314-cp314t-win_amd64.whl", hash = "sha256:b03e21b0bf95eb56e23973f32cabb930e94f352228652f81c0955dbd6967d904" },
     { url = "https://mirrors.aliyun.com/pypi/packages/22/80/368139067603e590a000122355f9c8576c8ebed4fb0b8849feaa2698489d/preshed-3.0.13-cp314-cp314t-win_arm64.whl", hash = "sha256:b980f3ea9bb74b7f94464bc3d6eb3c9162b6b79b531febd14c6465c24344d2cc" },
+]
+
+[[package]]
+name = "prometheus-client"
+version = "0.25.0"
+source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/1b/fb/d9aa83ffe43ce1f19e557c0971d04b90561b0cfd50762aafb01968285553/prometheus_client-0.25.0.tar.gz", hash = "sha256:5e373b75c31afb3c86f1a52fa1ad470c9aace18082d39ec0d2f918d11cc9ba28" }
+wheels = [
+    { url = "https://mirrors.aliyun.com/pypi/packages/8d/9b/d4b1e644385499c8346fa9b622a3f030dce14cd6ef8a1871c221a17a67e7/prometheus_client-0.25.0-py3-none-any.whl", hash = "sha256:d5aec89e349a6ec230805d0df882f3807f74fd6c1a2fa86864e3c2279059fed1" },
 ]
 
 [[package]]
@@ -2890,6 +2903,15 @@ dependencies = [
 sdist = { url = "https://mirrors.aliyun.com/pypi/packages/03/85/7c669b3a1336d34ef39fa9760fbd343185f3b15db2ad0838fd78423d1c7f/streamlit-1.56.0.tar.gz", hash = "sha256:1176acfa89ae1318b79078e8efe689a9d02e8d58e325c00fc0e55fa2f3fe8d6a" }
 wheels = [
     { url = "https://mirrors.aliyun.com/pypi/packages/e4/91/cb6f13a89e376ef179309d74f37a70ea0041d5e4b5ba5c4836dbf6e020ad/streamlit-1.56.0-py3-none-any.whl", hash = "sha256:8677a335734a30a51bc57ad0ec910e365d95f7c456fc02c60032927cd0729dc5" },
+]
+
+[[package]]
+name = "structlog"
+version = "25.5.0"
+source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/ef/52/9ba0f43b686e7f3ddfeaa78ac3af750292662284b3661e91ad5494f21dbc/structlog-25.5.0.tar.gz", hash = "sha256:098522a3bebed9153d4570c6d0288abf80a031dfdb2048d59a49e9dc2190fc98" }
+wheels = [
+    { url = "https://mirrors.aliyun.com/pypi/packages/a8/45/a132b9074aa18e799b891b91ad72133c98d8042c70f6240e4c5f9dabee2f/structlog-25.5.0-py3-none-any.whl", hash = "sha256:a8453e9b9e636ec59bd9e79bbd4a72f025981b3ba0f5837aebf48f02f37a7f9f" },
 ]
 
 [[package]]

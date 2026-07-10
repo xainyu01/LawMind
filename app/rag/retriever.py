@@ -4,6 +4,7 @@ from typing import List, Dict, Optional
 
 import bm25s
 import jieba
+import numpy as np
 
 from app.core.config import settings
 from app.rag import vector_store
@@ -16,6 +17,59 @@ BM25_CACHE_DIR = os.path.join(settings.CHROMA_PERSIST_DIR, "bm25_cache")
 def _jieba_tokenize(texts: List[str]) -> List[List[str]]:
     """Tokenize Chinese texts with jieba, return list of token lists."""
     return [list(jieba.cut(t)) for t in texts]
+
+
+def _cosine_similarity(a: List[float], b: List[float]) -> float:
+    """计算两个向量的余弦相似度。"""
+    a_np = np.array(a)
+    b_np = np.array(b)
+    dot = np.dot(a_np, b_np)
+    norm = np.linalg.norm(a_np) * np.linalg.norm(b_np)
+    return dot / norm if norm > 0 else 0.0
+
+
+def mmr_rerank(
+    query_embedding: List[float],
+    candidates: List[dict],
+    lambda_param: float = 0.5,
+    top_k: int = 5,
+) -> List[dict]:
+    """MMR 去重：平衡相关性与多样性。
+
+    lambda_param: 0 = 纯多样性, 1 = 纯相关性
+    """
+    if not candidates:
+        return []
+
+    selected = []
+    remaining = candidates.copy()
+
+    while len(selected) < top_k and remaining:
+        best_score = -1
+        best_idx = -1
+
+        for i, cand in enumerate(remaining):
+            # 相关性分数（使用 RRF 分数）
+            relevance = cand.get("rrf_score", 0)
+
+            # 与已选结果的最大相似度
+            max_sim = 0
+            for sel in selected:
+                if "embedding" in cand and "embedding" in sel:
+                    sim = _cosine_similarity(cand["embedding"], sel["embedding"])
+                    max_sim = max(max_sim, sim)
+
+            # MMR 分数
+            mmr_score = lambda_param * relevance - (1 - lambda_param) * max_sim
+
+            if mmr_score > best_score:
+                best_score = mmr_score
+                best_idx = i
+
+        if best_idx >= 0:
+            selected.append(remaining.pop(best_idx))
+
+    return selected
 
 
 class HybridRetriever:
@@ -94,12 +148,17 @@ class HybridRetriever:
                 self._loaded = True
             self._build_bm25()
 
-    def search(self, query: str, top_k: int | None = None) -> List[dict]:
+    def search(self, query: str, top_k: int | None = None, filter_repealed: bool = True) -> List[dict]:
         if top_k is None:
             top_k = settings.FINAL_TOP_K
         self._ensure_index()
 
         total_docs = max(self._doc_count, 1)
+
+        # 过滤已废止法条的条件
+        where_filter = None
+        if filter_repealed:
+            where_filter = {"status": {"$ne": "repealed"}}
 
         # --- BM25 ---
         bm25_rank: Dict[str, int] = {}
@@ -113,7 +172,7 @@ class HybridRetriever:
 
         # --- Vector ---
         vector_k = min(settings.VECTOR_TOP_K, total_docs)
-        vector_hits = vector_store.search(query, top_k=vector_k)
+        vector_hits = vector_store.search(query, top_k=vector_k, where=where_filter)
         vector_rank: Dict[str, int] = {}
         for rank, hit in enumerate(vector_hits):
             vector_rank[hit["id"]] = rank + 1
@@ -137,12 +196,34 @@ class HybridRetriever:
         sorted_ids = sorted(rrf_scores, key=rrf_scores.get, reverse=True)
 
         fused = []
-        for doc_id in sorted_ids[:top_k]:
+        for doc_id in sorted_ids[:top_k * 2]:  # 多取一些用于 MMR 筛选
             entry = doc_store.get(doc_id, {"id": doc_id, "content": "", "metadata": {}, "distance": None})
             entry["rrf_score"] = rrf_scores[doc_id]
+            # 如果启用了过滤，跳过已废止法条
+            if filter_repealed and entry.get("metadata", {}).get("status") == "repealed":
+                continue
             fused.append(entry)
 
-        return fused
+        # MMR 去重
+        if settings.MMR_ENABLED and len(fused) > top_k:
+            # 获取查询向量用于 MMR
+            from app.rag.embedding import get_embedding
+            query_emb = get_embedding(query)
+            # 获取候选文档的向量（从 ChromaDB 查询）
+            candidate_ids = [e["id"] for e in fused[:top_k * 2]]
+            if candidate_ids:
+                emb_data = vector_store.get_embeddings_by_ids(candidate_ids)
+                for entry in fused:
+                    if entry["id"] in emb_data:
+                        entry["embedding"] = emb_data[entry["id"]]
+                fused = mmr_rerank(
+                    query_embedding=query_emb,
+                    candidates=fused,
+                    lambda_param=settings.MMR_LAMBDA,
+                    top_k=top_k,
+                )
+
+        return fused[:top_k]
 
 
 def get_retriever() -> HybridRetriever:
