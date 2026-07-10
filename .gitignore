@@ -29,3 +29,6 @@ data/*_temp/
 # OS
 .DS_Store
 Thumbs.db
+
+# Exclude law_ai-master
+文档/law_ai-master/
