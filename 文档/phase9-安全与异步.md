@@ -2,7 +2,7 @@
 
 本阶段目标：增强系统安全性与高并发能力，包括 API 认证鉴权、请求限流、消息队列异步处理。
 
-**状态：📝 待实施**
+**状态：✅ 已完成**
 
 ---
 
@@ -510,17 +510,17 @@ curl http://localhost:8000/api/v1/task/$TASK_ID
 
 ## 6. 阶段检查清单
 
-- [ ] `app/core/auth.py` 认证模块（API Key + JWT）
-- [ ] `app/core/rate_limit.py` 限流模块（滑动窗口）
-- [ ] `app/db/queue.py` 消息队列模块（Redis Stream）
-- [ ] `scripts/worker.py` 后台 Worker 进程
-- [ ] `app/api/routes.py` 集成认证和限流中间件
-- [ ] `app/core/config.py` 添加认证、限流、队列配置项
-- [ ] API Key 认证验证
-- [ ] JWT 认证验证
-- [ ] 请求限流验证
-- [ ] 消息队列异步处理验证
-- [ ] 文档更新（进度.md、开发指南.md）
+- [x] `app/core/auth.py` 认证模块（API Key + JWT）
+- [x] `app/core/rate_limit.py` 限流模块（滑动窗口）
+- [x] `app/db/queue.py` 消息队列模块（Redis Stream）
+- [x] `scripts/worker.py` 后台 Worker 进程
+- [x] `app/api/routes.py` 集成认证和限流中间件
+- [x] `app/core/config.py` 添加认证、限流、队列配置项
+- [x] API Key 认证验证
+- [x] JWT 认证验证
+- [x] 请求限流验证
+- [x] 消息队列异步处理验证
+- [x] 文档更新（进度.md、开发指南.md）
 
 ---
 

@@ -1,7 +1,18 @@
 import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
+def _parse_api_keys(raw: str) -> list[str]:
+    """解析 API_KEYS 环境变量（JSON 数组或逗号分隔）。"""
+    if not raw:
+        return []
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return [k.strip() for k in raw.split(",") if k.strip()]
 
 
 class Settings:
@@ -55,6 +66,18 @@ class Settings:
     CASE_CACHE_TTL: int = 2592000          # 案例缓存 30 天
     LEGAL_QA_CACHE_TTL: int = 604800       # 知识问答缓存 7 天
     CONTRACT_CACHE_TTL: int = 86400        # 合同审查缓存 1 天
+
+    # 认证
+    AUTH_ENABLED: bool = os.getenv("AUTH_ENABLED", "false").lower() == "true"
+    AUTH_MODE: str = os.getenv("AUTH_MODE", "api_key")  # api_key / jwt / both
+    API_KEYS: list[str] = _parse_api_keys(os.getenv("API_KEYS", ""))
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "")
+    JWT_EXPIRE_HOURS: int = int(os.getenv("JWT_EXPIRE_HOURS", "24"))
+
+    # 限流
+    RATE_LIMIT_ENABLED: bool = os.getenv("RATE_LIMIT_ENABLED", "false").lower() == "true"
+    RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
+    RATE_LIMIT_PER_HOUR: int = int(os.getenv("RATE_LIMIT_PER_HOUR", "1000"))
 
 
 settings = Settings()

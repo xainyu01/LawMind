@@ -26,6 +26,7 @@ dependencies = [
     "diskcache>=5.6.3",
     "prometheus-client>=0.25.0",
     "structlog>=25.5.0",
+    "PyJWT>=2.8.0",
 ]
 
 [[tool.uv.index]]

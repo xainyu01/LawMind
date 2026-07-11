@@ -1,12 +1,13 @@
 import time
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
 from app.core.config import settings
 from app.core.logging import get_logger
+from app.core.auth import verify_auth
 from app.rag.retriever import get_retriever
 from app.rag.reranker import get_reranker
 from app.rag.generator import get_generator
@@ -50,7 +51,7 @@ NO_RESULT_ANSWER = (
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest, _auth: dict = Depends(verify_auth)):
     """Legal Q&A endpoint: cache check → retrieve → rerank → filter → generate → save."""
     start_time = time.time()
     logger.info("chat_request", query=request.query, session_id=request.session_id)
@@ -148,3 +149,49 @@ async def metrics():
         content=generate_latest(),
         media_type=CONTENT_TYPE_LATEST,
     )
+
+
+# ---- 异步任务接口 ----
+
+class AsyncTaskResponse(BaseModel):
+    task_id: str
+    status: str = "queued"
+    message: str
+
+
+class TaskStatusResponse(BaseModel):
+    status: str
+    result: dict | None = None
+
+
+@router.post("/chat/async", response_model=AsyncTaskResponse)
+async def chat_async(request: ChatRequest, _auth: dict = Depends(verify_auth)):
+    """异步问答接口 — 将任务发布到 Redis Stream 队列。"""
+    from app.db.queue import TaskQueue
+
+    queue = TaskQueue()
+    task_id = queue.publish({
+        "type": "chat",
+        "query": request.query,
+        "session_id": request.session_id,
+    })
+
+    logger.info("async_task_queued", task_id=task_id, query=request.query)
+    return AsyncTaskResponse(
+        task_id=task_id,
+        status="queued",
+        message="任务已加入队列，请通过 /task/{task_id} 查询结果",
+    )
+
+
+@router.get("/task/{task_id}", response_model=TaskStatusResponse)
+async def get_task_result(task_id: str, _auth: dict = Depends(verify_auth)):
+    """查询异步任务结果。"""
+    from app.db.queue import TaskQueue
+
+    queue = TaskQueue()
+    result = queue.get_result(task_id)
+
+    if result is None:
+        return TaskStatusResponse(status="processing")
+    return TaskStatusResponse(status="completed", result=result)
