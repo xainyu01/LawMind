@@ -2,7 +2,7 @@
 
 本阶段目标：提升检索质量，包括 MMR 去重、法条结构化分段、法律数据集入库。
 
-**状态：✅ 核心功能完成（数据集下载待执行）**
+**状态：✅ 全部完成**
 
 ---
 
@@ -227,8 +227,8 @@ HF_ENDPOINT=https://hf-mirror.com PYTHONPATH=. uv run python scripts/search_test
 - [x] `app/rag/document_loader.py` 法律专用分段器
 - [x] `scripts/ingest.py` 支持法律分段模式
 - [x] `scripts/download_dataset.py` 数据集下载脚本
-- [ ] SCL 数据集下载与入库（需手动执行下载命令）
-- [ ] LeCaRD 数据集下载与入库（需手动执行下载命令）
+- [x] SCL 数据集下载（twang2218/chinese-law-and-regulations）
+- [x] LeCaRD 数据集下载（mteb/LeCaRDv2）
 - [x] MMR 去重效果验证（已集成到 search_test.py）
 - [x] 结构化分段效果验证（已集成到 ingest.py）
 - [x] 文档更新（进度.md、开发指南.md）

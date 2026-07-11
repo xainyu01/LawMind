@@ -23,6 +23,9 @@ data/chroma/
 # Temp datasets
 data/*_temp/
 
+# Large datasets (downloadable)
+data/datasets/
+
 # Claude Code
 .claude/
 

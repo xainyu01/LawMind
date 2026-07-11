@@ -15,13 +15,13 @@ from pathlib import Path
 # 数据集配置
 DATASETS = {
     "scl": {
-        "repo_id": "shibing624/scl_chinese_law",
-        "description": "标准中国法律数据集（~2万部法律）",
+        "repo_id": "twang2218/chinese-law-and-regulations",
+        "description": "中国法律法规数据集（10K-100K 条）",
         "local_dir": "data/datasets/scl",
     },
     "lecard": {
-        "repo_id": "shibing624/lecard",
-        "description": "法律案例检索数据集（~10万裁判文书）",
+        "repo_id": "mteb/LeCaRDv2",
+        "description": "法律案例检索数据集（LeCaRD v2）",
         "local_dir": "data/datasets/lecard",
     },
 }
