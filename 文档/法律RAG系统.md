@@ -153,7 +153,60 @@
 
 ---
 
-## 五、推荐法律数据集（适配 RTX 5060 8GB）
+## 五、用户认证与数据库设计
+
+### 认证方案：Access + Refresh 双令牌
+
+```
+登录 → Access Token（60分钟）+ Refresh Token（7天）
+         │
+         ├─ API 请求携带 Access Token
+         │    └─ 过期 → 自动用 Refresh Token 刷新（用户无感）
+         │
+         └─ Refresh Token 存 MySQL（支持吊销）
+              └─ 也过期 → 重新登录
+```
+
+### MySQL 表结构
+
+```sql
+-- 用户表
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(128) NOT NULL,        -- bcrypt 哈希
+    role VARCHAR(10) DEFAULT 'user',            -- admin / user
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 刷新令牌表（支持吊销）
+CREATE TABLE refresh_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    token_jti VARCHAR(36) UNIQUE NOT NULL,      -- JWT ID，用于吊销
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+### API 接口
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/auth/register` | POST | 用户注册 |
+| `/auth/login` | POST | 用户登录（返回双令牌） |
+| `/auth/refresh` | POST | 刷新 Access Token |
+| `/auth/me` | GET | 获取当前用户信息 |
+| `/auth/logout` | POST | 登出（吊销所有 Refresh Token） |
+| `/auth/users` | GET | 管理员查看用户列表 |
+| `/auth/users/{id}` | DELETE | 管理员删除用户 |
+
+---
+
+## 六、推荐法律数据集（适配 RTX 5060 8GB）
 
 ### 知识库底库类
 

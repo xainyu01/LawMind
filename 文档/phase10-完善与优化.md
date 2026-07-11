@@ -2,7 +2,7 @@
 
 本阶段目标：完善系统架构，补充对象存储、关系数据库、可视化监控、实时通信、性能优化等生产级功能。
 
-**状态：📝 待实施**
+**状态：✅ 用户认证已完成（MySQL + 双令牌）**
 
 ---
 
@@ -835,24 +835,28 @@ uv run locust -f tests/locustfile.py --host http://localhost:8000
 
 ## 9. 阶段检查清单
 
+### 用户认证系统 ✅
+
+- [x] `app/db/mysql_client.py` MySQL 客户端（SQLAlchemy 引擎、会话、建表）
+- [x] `app/db/models.py` ORM 模型（User、RefreshToken）
+- [x] `scripts/init_db.py` 数据库初始化脚本（建库建表、创建管理员）
+- [x] `app/core/auth.py` 双令牌认证（Access + Refresh、bcrypt 密码哈希）
+- [x] `app/api/auth_routes.py` 认证路由（注册/登录/刷新/登出/用户管理）
+- [x] `app.py` Streamlit 登录界面（登录/注册/自动刷新/管理员面板）
+- [x] `app/core/config.py` MySQL + JWT 双密钥配置
+- [x] `main.py` 启动时自动建表、创建管理员
+- [x] MySQL 建表验证（users + refresh_tokens）
+- [x] 注册/登录/刷新流程验证
+
+### 待实施（可选）
+
 - [ ] `app/storage/minio_client.py` MinIO 客户端
 - [ ] `app/api/routes.py` 文档上传/下载接口
-- [ ] `app/db/mysql_client.py` MySQL 客户端与模型
-- [ ] `scripts/init.sql` 数据库初始化脚本
-- [ ] `app/api/routes.py` 对话记录持久化
 - [ ] `grafana/` Grafana 配置与仪表盘
 - [ ] `prometheus.yml` Prometheus 配置
 - [ ] `app/api/routes.py` WebSocket 接口
-- [ ] `app/rag/generator.py` 法条链接生成
 - [ ] `tests/locustfile.py` 性能测试脚本
-- [ ] `app/core/config.py` 添加新配置项
-- [ ] `docker-compose.yml` 添加新服务
-- [ ] MinIO 存储验证
-- [ ] MySQL 存储验证
-- [ ] Grafana 监控验证
-- [ ] WebSocket 实时通信验证
 - [ ] 性能测试与优化
-- [ ] 文档更新（进度.md、开发指南.md）
 
 ---
 

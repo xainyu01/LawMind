@@ -67,12 +67,20 @@ class Settings:
     LEGAL_QA_CACHE_TTL: int = 604800       # 知识问答缓存 7 天
     CONTRACT_CACHE_TTL: int = 86400        # 合同审查缓存 1 天
 
+    # MySQL
+    MYSQL_URL: str = os.getenv("MYSQL_URL", "mysql+pymysql://root:1234@localhost:3306/legal_rag")
+
     # 认证
-    AUTH_ENABLED: bool = os.getenv("AUTH_ENABLED", "false").lower() == "true"
-    AUTH_MODE: str = os.getenv("AUTH_MODE", "api_key")  # api_key / jwt / both
+    AUTH_ENABLED: bool = os.getenv("AUTH_ENABLED", "true").lower() == "true"
+    JWT_ACCESS_SECRET: str = os.getenv("JWT_ACCESS_SECRET", "legal-rag-access-secret-key")
+    JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "legal-rag-refresh-secret-key")
+    JWT_ACCESS_EXPIRE_MINUTES: int = int(os.getenv("JWT_ACCESS_EXPIRE_MINUTES", "60"))
+    JWT_REFRESH_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_EXPIRE_DAYS", "7"))
     API_KEYS: list[str] = _parse_api_keys(os.getenv("API_KEYS", ""))
-    JWT_SECRET: str = os.getenv("JWT_SECRET", "")
-    JWT_EXPIRE_HOURS: int = int(os.getenv("JWT_EXPIRE_HOURS", "24"))
+
+    # 默认管理员（首次启动自动创建）
+    ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "admin123")
 
     # 限流
     RATE_LIMIT_ENABLED: bool = os.getenv("RATE_LIMIT_ENABLED", "false").lower() == "true"

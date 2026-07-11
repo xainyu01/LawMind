@@ -7,7 +7,7 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 
 from app.core.config import settings
 from app.core.logging import get_logger
-from app.core.auth import verify_auth
+from app.core.auth import get_current_user
 from app.rag.retriever import get_retriever
 from app.rag.reranker import get_reranker
 from app.rag.generator import get_generator
@@ -51,7 +51,7 @@ NO_RESULT_ANSWER = (
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest, _auth: dict = Depends(verify_auth)):
+async def chat(request: ChatRequest, _auth: dict = Depends(get_current_user)):
     """Legal Q&A endpoint: cache check → retrieve → rerank → filter → generate → save."""
     start_time = time.time()
     logger.info("chat_request", query=request.query, session_id=request.session_id)
@@ -165,7 +165,7 @@ class TaskStatusResponse(BaseModel):
 
 
 @router.post("/chat/async", response_model=AsyncTaskResponse)
-async def chat_async(request: ChatRequest, _auth: dict = Depends(verify_auth)):
+async def chat_async(request: ChatRequest, _auth: dict = Depends(get_current_user)):
     """异步问答接口 — 将任务发布到 Redis Stream 队列。"""
     from app.db.queue import TaskQueue
 
@@ -185,7 +185,7 @@ async def chat_async(request: ChatRequest, _auth: dict = Depends(verify_auth)):
 
 
 @router.get("/task/{task_id}", response_model=TaskStatusResponse)
-async def get_task_result(task_id: str, _auth: dict = Depends(verify_auth)):
+async def get_task_result(task_id: str, _auth: dict = Depends(get_current_user)):
     """查询异步任务结果。"""
     from app.db.queue import TaskQueue
 
