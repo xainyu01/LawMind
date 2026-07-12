@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 
 from app.core.config import settings
 
-_embedder: Optional[BgeEmbedding] = None
+_embedder: Optional["BgeEmbedding"] = None
 
 
 class BgeEmbedding:

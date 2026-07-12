@@ -1,6 +1,5 @@
 """单元测试 - 向量存储模块（使用 mock）"""
 
-import pytest
 from unittest.mock import patch, MagicMock
 
 
@@ -51,7 +50,7 @@ class TestVectorStore:
         }
         mock_get_col.return_value = mock_col
 
-        results = search("测试", where={"status": {"$ne": "repealed"}})
+        search("测试", where={"status": {"$ne": "repealed"}})
         mock_col.query.assert_called_once()
         call_kwargs = mock_col.query.call_args[1]
         assert "where" in call_kwargs

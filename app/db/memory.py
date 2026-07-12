@@ -31,7 +31,6 @@ class ConversationMemory:
         sources: Optional[list] = None,
     ) -> None:
         """保存一轮对话（user + assistant）到 List，并更新上下文 Hash."""
-        import time
 
         user_entry = json.dumps({"role": "user", "content": user_msg}, ensure_ascii=False)
         asst_entry = json.dumps({"role": "assistant", "content": assistant_msg}, ensure_ascii=False)

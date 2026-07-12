@@ -1,7 +1,7 @@
 """单元测试 - 检索模块"""
 
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 
 class TestMMRRerank:

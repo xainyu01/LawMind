@@ -1,7 +1,6 @@
 """单元测试 - 配置模块"""
 
 import os
-import pytest
 from unittest.mock import patch
 
 

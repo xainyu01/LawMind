@@ -1,7 +1,6 @@
 """单元测试 - LLM 生成模块"""
 
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 
 class TestChitchatResponses:

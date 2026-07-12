@@ -60,7 +60,7 @@ async def chat(request: ChatRequest, _auth: dict = Depends(get_current_user)):
     reranker = get_reranker()
     generator = get_generator()
     memory = ConversationMemory()
-    cache = SemanticCache()
+    _cache = SemanticCache()
 
     # 0. 先判断意图，闲聊直接返回（不需要检索）
     from app.rag.generator import _classify_intent_with_llm, CHITCHAT_RESPONSES
@@ -79,7 +79,7 @@ async def chat(request: ChatRequest, _auth: dict = Depends(get_current_user)):
         return ChatResponse(answer="您好！有什么法律问题需要我帮忙吗？", sources=[], intent="chitchat")
 
     # 1. 语义缓存检查（复用检索阶段的 embedding）
-    embedding_model = retriever._get_embedding_model() if hasattr(retriever, "_get_embedding_model") else None
+    _embedding_model = retriever._get_embedding_model() if hasattr(retriever, "_get_embedding_model") else None
     # 检索内部会做 embedding，这里先用 retriever 的方法获取
     # 为了复用 embedding，我们先做检索，再检查缓存
     retrieval_start = time.time()

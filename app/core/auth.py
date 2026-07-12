@@ -10,9 +10,8 @@ import jwt
 import bcrypt
 import logging
 from datetime import datetime, timedelta, timezone
-from typing import Optional
 
-from fastapi import HTTPException, Depends, Header
+from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.core.config import settings

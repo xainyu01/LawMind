@@ -194,7 +194,7 @@ def ingest_auto(path: str, split_mode: str = "default", resume: bool = False):
     # 完成
     elapsed = time.time() - start_time
     print("\n" + "=" * 80)
-    print(f"入库完成！")
+    print("入库完成！")
     print(f"  总文件: {total_files}")
     print(f"  已处理: {len(processed)}")
     print(f"  总片段: {total_chunks}")

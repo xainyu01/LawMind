@@ -5,7 +5,6 @@
 运行方式: PYTHONPATH=. uv run python tests/functional/test_vector_search.py
 """
 
-import sys
 import time
 import os
 

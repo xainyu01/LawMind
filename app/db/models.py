@@ -1,6 +1,5 @@
 """ORM 模型 — 用户表、刷新令牌表."""
 
-from datetime import datetime
 
 from sqlalchemy import Column, BigInteger, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func

@@ -20,6 +20,9 @@ models/
 # ChromaDB persistence
 data/chroma/
 
+# Ingestion checkpoints
+data/checkpoints/
+
 # Temp datasets
 data/*_temp/
 

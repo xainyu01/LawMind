@@ -5,7 +5,6 @@
 """
 
 import sys
-import time
 import io
 
 # Windows 终端中文兼容
@@ -27,7 +26,7 @@ print("=" * 50)
 
 # 1. 配置
 print("\n[1/5] 配置检查...")
-from app.core.config import settings
+from app.core.config import settings  # noqa: E402
 
 check(settings.RERANKER_MODEL_NAME == "BAAI/bge-reranker-base", f"重排序模型: {settings.RERANKER_MODEL_NAME}")
 check(settings.BM25_TOP_K == 10, f"BM25_TOP_K: {settings.BM25_TOP_K}")
@@ -35,7 +34,7 @@ check(settings.LLM_MODEL != "", f"LLM 模型: {settings.LLM_MODEL}")
 
 # 2. 混合检索
 print("\n[2/5] 混合检索 (BM25 + 向量 + RRF)...")
-from app.rag.retriever import get_retriever
+from app.rag.retriever import get_retriever  # noqa: E402
 
 retriever = get_retriever()
 results = retriever.search("夫妻义务", top_k=3)
@@ -45,7 +44,7 @@ if results:
 
 # 3. 重排序
 print("\n[3/5] 重排序 (Cross-Encoder)...")
-from app.rag.reranker import get_reranker
+from app.rag.reranker import get_reranker  # noqa: E402
 
 reranker = get_reranker()
 reranked = reranker.rerank("夫妻义务", results)
@@ -55,7 +54,7 @@ if reranked:
 
 # 4. LLM 生成
 print("\n[4/5] LLM 生成 (DeepSeek API)...")
-from app.rag.generator import get_generator
+from app.rag.generator import get_generator  # noqa: E402
 
 generator = get_generator()
 result = generator.generate("夫妻义务", reranked[:3])

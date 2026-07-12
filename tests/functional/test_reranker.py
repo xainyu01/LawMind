@@ -5,7 +5,6 @@
 运行方式: PYTHONPATH=. uv run python tests/functional/test_reranker.py
 """
 
-import sys
 import os
 
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")

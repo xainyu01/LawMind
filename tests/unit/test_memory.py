@@ -1,7 +1,6 @@
 """单元测试 - 对话记忆模块"""
 
 import json
-import pytest
 from unittest.mock import patch, MagicMock
 
 

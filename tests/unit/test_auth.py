@@ -2,7 +2,6 @@
 
 import pytest
 import jwt
-from unittest.mock import patch, MagicMock
 from datetime import datetime, timedelta, timezone
 
 

@@ -14,8 +14,6 @@ RAGAS 风格的 RAG 评测脚本。
 
 import argparse
 import json
-import os
-import sys
 import time
 from typing import List, Dict
 
@@ -216,13 +214,13 @@ def main():
     with open(args.dataset, encoding="utf-8") as f:
         dataset = json.load(f)
 
-    print(f"=" * 60)
-    print(f"RAGAS 风格 RAG 评测")
-    print(f"=" * 60)
+    print("=" * 60)
+    print("RAGAS 风格 RAG 评测")
+    print("=" * 60)
     print(f"数据集: {args.dataset}")
     print(f"样本数: {len(dataset)}")
     print(f"LLM: {settings.LLM_MODEL}")
-    print(f"=" * 60)
+    print("=" * 60)
 
     results = []
     metrics_summary = {

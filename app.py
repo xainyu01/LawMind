@@ -279,8 +279,8 @@ def main_app():
                         st.error(f"入库失败: {e}")
 
         st.divider()
-        st.caption(f"检索策略：BM25 + 向量 + Cross-Encoder 重排序")
-        st.caption(f"LLM：DeepSeek API")
+        st.caption("检索策略：BM25 + 向量 + Cross-Encoder 重排序")
+        st.caption("LLM：DeepSeek API")
         st.divider()
         st.caption(f"会话 ID: `{st.session_state.session_id}`")
         st.caption(f"缓存命中: {st.session_state.cache_hits} 次")
@@ -307,7 +307,7 @@ def main_app():
     from app.db.memory import ConversationMemory
     from app.db.cache import SemanticCache
     memory = ConversationMemory()
-    cache = SemanticCache()
+    _cache = SemanticCache()
 
     # ---- Helper ----
     def save_feedback(session_id: str, query: str, answer: str, rating: str, intent: str):

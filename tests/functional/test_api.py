@@ -8,8 +8,6 @@
 """
 
 import sys
-import json
-import os
 
 try:
     import requests
@@ -48,7 +46,7 @@ def test_auth_flow():
         data = resp.json()
         assert "access_token" in data
         assert "refresh_token" in data
-        print(f"    注册成功，获得 token")
+        print("    注册成功，获得 token")
 
     # 登录
     print("    [2.2] 登录")
@@ -59,8 +57,8 @@ def test_auth_flow():
     assert resp.status_code == 200, f"登录失败: {resp.text}"
     data = resp.json()
     access_token = data["access_token"]
-    refresh_token = data["refresh_token"]
-    print(f"    登录成功")
+    _refresh_token = data["refresh_token"]
+    print("    登录成功")
 
     # 获取用户信息
     print("    [2.3] 获取用户信息")

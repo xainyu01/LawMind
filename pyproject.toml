@@ -2,7 +2,7 @@
 name = "legal-rag"
 version = "0.1.0"
 description = "法律领域RAG系统 — 支持法条检索、案例分析、法律咨询的智能检索增强生成系统"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "bm25s>=0.3.9",
     "chromadb>=0.6.0",
@@ -44,6 +44,9 @@ explicit = true
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu128" }
+
+[tool.ruff]
+exclude = ["文档/archive/*"]
 
 [dependency-groups]
 dev = [

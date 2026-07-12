@@ -6,7 +6,6 @@
     uv run python scripts/ingest.py --split-mode legal data/docs/
 """
 
-import re
 import sys
 from pathlib import Path
 

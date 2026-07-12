@@ -1,9 +1,7 @@
 """请求限流 — 基于滑动窗口的速率限制，支持 Redis 和 DiskCache 后端."""
 
 import time
-import json
 import logging
-from typing import Optional
 
 from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware

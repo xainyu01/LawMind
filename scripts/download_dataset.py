@@ -8,7 +8,6 @@
     HF_ENDPOINT=https://hf-mirror.com uv run python scripts/download_dataset.py all
 """
 
-import os
 import sys
 from pathlib import Path
 
