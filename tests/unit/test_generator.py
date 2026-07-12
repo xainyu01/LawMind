@@ -13,8 +13,9 @@ class TestChitchatResponses:
         assert "你是谁" in CHITCHAT_RESPONSES
         assert "谢谢" in CHITCHAT_RESPONSES
 
+    @patch("app.rag.generator.OpenAI")
     @patch("app.rag.generator._classify_intent_with_llm")
-    def test_chitchat_direct_return(self, mock_classify):
+    def test_chitchat_direct_return(self, mock_classify, mock_openai):
         """测试闲聊直接返回（不调用 LLM）"""
         from app.rag.generator import LegalGenerator
         mock_classify.return_value = "chitchat"
@@ -25,8 +26,9 @@ class TestChitchatResponses:
         assert "您好" in result["answer"]
         assert result["sources"] == []
 
+    @patch("app.rag.generator.OpenAI")
     @patch("app.rag.generator._classify_intent_with_llm")
-    def test_unknown_chitchat(self, mock_classify):
+    def test_unknown_chitchat(self, mock_classify, mock_openai):
         """测试未知闲聊（兜底回复）"""
         from app.rag.generator import LegalGenerator
         mock_classify.return_value = "chitchat"
