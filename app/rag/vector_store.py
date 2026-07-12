@@ -77,9 +77,22 @@ def search(query: str, top_k: int = 5, where: Optional[dict] = None) -> List[dic
 
 
 def get_all_documents() -> dict:
-    """Return all documents from the collection (ids, documents, metadatas)."""
+    """Return all documents from the collection (ids, documents, metadatas).
+    Uses batched fetching to avoid SQL variable overflow with large collections.
+    """
     collection = _get_collection()
-    return collection.get()
+    count = collection.count()
+    if count == 0:
+        return {"ids": [], "documents": [], "metadatas": []}
+
+    all_ids, all_docs, all_metas = [], [], []
+    batch_size = 5000
+    for offset in range(0, count, batch_size):
+        batch = collection.get(limit=batch_size, offset=offset)
+        all_ids.extend(batch["ids"])
+        all_docs.extend(batch["documents"])
+        all_metas.extend(batch["metadatas"])
+    return {"ids": all_ids, "documents": all_docs, "metadatas": all_metas}
 
 
 def get_collection_count() -> int:

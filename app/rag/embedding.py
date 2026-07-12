@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+import torch
 from sentence_transformers import SentenceTransformer
 
 from app.core.config import settings
@@ -15,12 +16,16 @@ class BgeEmbedding:
             cache_folder="./models",
             local_files_only=False,
         )
+        # 使用 FP16 加速
+        if settings.EMBEDDING_DEVICE == "cuda" and torch.cuda.is_available():
+            self.model = self.model.half()  # 转换为 FP16
 
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+    def embed_documents(self, texts: List[str], batch_size: int = 512) -> List[List[float]]:
         embeddings = self.model.encode(
             texts,
             normalize_embeddings=True,
             show_progress_bar=True,
+            batch_size=batch_size,
         )
         return embeddings.tolist()
 
