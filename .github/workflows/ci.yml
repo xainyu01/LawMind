@@ -10,19 +10,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install 3.12
 
       - name: Install dependencies
-        run: uv sync
-        env:
-          # CI 环境用 CPU 版本的 torch，避免 CUDA 依赖问题
-          UV_INDEX: "https://pypi.org/simple/"
+        run: uv sync --index-url https://pypi.org/simple/
 
       - name: Run linting
         run: uv run ruff check .
